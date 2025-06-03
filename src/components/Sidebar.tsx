@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Home, Code, BookOpen, Settings, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Home, Code, BookOpen, Settings, ChevronLeft, ChevronRight, Terminal } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 
 interface SidebarProps {
@@ -15,6 +15,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, toggleSidebar }) => {
     { icon: Home, label: 'Home', path: '/' },
     { icon: Code, label: 'Scaffold', path: '/scaffold' },
     { icon: BookOpen, label: 'Best Practices', path: '/best-practices' },
+    { icon: Terminal, label: 'Prompt Library', path: '/prompt-library' },
     { icon: Settings, label: 'Settings', path: '/settings' },
   ];
 

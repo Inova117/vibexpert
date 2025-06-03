@@ -1,11 +1,16 @@
-
 import React, { useState } from 'react';
-import { User, Bell, Palette, Download, Trash2 } from 'lucide-react';
+import { User, Bell, Palette, Download, Trash2, Github, Users, CreditCard, ExternalLink, Check, X, Plus } from 'lucide-react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
 
 const Settings: React.FC = () => {
   const [notifications, setNotifications] = useState(true);
   const [darkMode, setDarkMode] = useState(true);
   const [autoSave, setAutoSave] = useState(true);
+  const [repoUrl, setRepoUrl] = useState('');
+  const [connectionStatus, setConnectionStatus] = useState<'idle' | 'connecting' | 'success' | 'error'>('idle');
+  const [newCollaborator, setNewCollaborator] = useState('');
+  const [pendingInvites] = useState(['john@dev.com', 'sarah@startup.io']);
 
   const clearProjectData = () => {
     localStorage.removeItem('vibe-builder-data');
@@ -29,6 +34,22 @@ const Settings: React.FC = () => {
     URL.revokeObjectURL(url);
   };
 
+  const handleRepoConnect = () => {
+    setConnectionStatus('connecting');
+    // Simulate connection
+    setTimeout(() => {
+      setConnectionStatus(Math.random() > 0.3 ? 'success' : 'error');
+    }, 2000);
+  };
+
+  const addCollaborator = () => {
+    if (newCollaborator) {
+      // Simulate sending invite
+      setNewCollaborator('');
+      alert(`Invite sent to ${newCollaborator}`);
+    }
+  };
+
   return (
     <div className="min-h-screen p-8">
       <div className="max-w-4xl mx-auto space-y-8">
@@ -38,6 +59,160 @@ const Settings: React.FC = () => {
           <p className="text-gray-400">
             Customize your Vibe-Builder experience and manage your preferences.
           </p>
+        </div>
+
+        {/* GitHub Integration */}
+        <div className="bg-white/5 backdrop-blur-xl rounded-2xl border border-white/10 p-6">
+          <h2 className="text-xl font-semibold text-white mb-6 flex items-center space-x-2">
+            <Github className="text-orange-400" size={20} />
+            <span>GitHub Repository Integration</span>
+          </h2>
+          
+          <div className="space-y-4">
+            <div>
+              <label className="block text-white font-medium mb-2">Repository URL</label>
+              <div className="flex space-x-3">
+                <input
+                  type="url"
+                  value={repoUrl}
+                  onChange={(e) => setRepoUrl(e.target.value)}
+                  placeholder="https://github.com/username/repository"
+                  className="flex-1 px-4 py-3 bg-black/20 border border-white/20 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400/50 focus:border-blue-400/50"
+                />
+                <button
+                  onClick={handleRepoConnect}
+                  disabled={!repoUrl || connectionStatus === 'connecting'}
+                  className="px-6 py-3 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 disabled:cursor-not-allowed rounded-xl text-white font-medium transition-colors"
+                >
+                  {connectionStatus === 'connecting' ? 'Connecting...' : 'Connect'}
+                </button>
+              </div>
+            </div>
+            
+            {connectionStatus === 'success' && (
+              <div className="flex items-center space-x-2 p-3 bg-green-500/10 border border-green-400/20 rounded-lg">
+                <Check className="text-green-400" size={16} />
+                <span className="text-green-300 text-sm">Successfully connected to repository</span>
+              </div>
+            )}
+            
+            {connectionStatus === 'error' && (
+              <div className="flex items-center space-x-2 p-3 bg-red-500/10 border border-red-400/20 rounded-lg">
+                <X className="text-red-400" size={16} />
+                <span className="text-red-300 text-sm">Failed to connect. Please check the URL and try again.</span>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Collaborators */}
+        <div className="bg-white/5 backdrop-blur-xl rounded-2xl border border-white/10 p-6">
+          <h2 className="text-xl font-semibold text-white mb-6 flex items-center space-x-2">
+            <Users className="text-green-400" size={20} />
+            <span>Team Collaborators</span>
+          </h2>
+          
+          <div className="space-y-6">
+            <div>
+              <label className="block text-white font-medium mb-2">Invite by Email</label>
+              <div className="flex space-x-3">
+                <input
+                  type="email"
+                  value={newCollaborator}
+                  onChange={(e) => setNewCollaborator(e.target.value)}
+                  placeholder="developer@company.com"
+                  className="flex-1 px-4 py-3 bg-black/20 border border-white/20 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-400/50 focus:border-green-400/50"
+                />
+                <button
+                  onClick={addCollaborator}
+                  className="px-6 py-3 bg-green-600 hover:bg-green-700 rounded-xl text-white font-medium transition-colors flex items-center space-x-2"
+                >
+                  <Plus size={16} />
+                  <span>Invite</span>
+                </button>
+              </div>
+            </div>
+            
+            {pendingInvites.length > 0 && (
+              <div>
+                <h3 className="text-white font-medium mb-3">Pending Invites</h3>
+                <div className="space-y-2">
+                  {pendingInvites.map((email, index) => (
+                    <div key={index} className="flex items-center justify-between p-3 bg-black/20 rounded-lg">
+                      <span className="text-gray-300">{email}</span>
+                      <span className="text-yellow-400 text-sm">Pending</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Payment & Export */}
+        <div className="bg-white/5 backdrop-blur-xl rounded-2xl border border-white/10 p-6">
+          <h2 className="text-xl font-semibold text-white mb-6 flex items-center space-x-2">
+            <CreditCard className="text-purple-400" size={20} />
+            <span>Payment & Premium Features</span>
+          </h2>
+          
+          <div className="grid md:grid-cols-2 gap-6">
+            <div className="space-y-4">
+              <button className="w-full flex items-center justify-center space-x-2 p-4 bg-purple-600 hover:bg-purple-700 rounded-lg text-white transition-colors">
+                <CreditCard size={20} />
+                <span>Setup Stripe Payment</span>
+              </button>
+              <p className="text-gray-400 text-sm">
+                Configure payment processing for your generated MVPs
+              </p>
+            </div>
+            
+            <div className="space-y-4">
+              <Dialog>
+                <DialogTrigger asChild>
+                  <button className="w-full flex items-center justify-center space-x-2 p-4 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 rounded-lg text-white transition-colors">
+                    <ExternalLink size={20} />
+                    <span>Upgrade to Custom Design</span>
+                  </button>
+                </DialogTrigger>
+                <DialogContent className="bg-gray-900 border border-white/20">
+                  <DialogHeader>
+                    <DialogTitle className="text-white">Premium Features</DialogTitle>
+                  </DialogHeader>
+                  <div className="space-y-4 text-gray-300">
+                    <div className="space-y-3">
+                      <div className="flex items-center space-x-2">
+                        <Check className="text-green-400" size={16} />
+                        <span>Custom UI component library</span>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <Check className="text-green-400" size={16} />
+                        <span>Advanced authentication flows</span>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <Check className="text-green-400" size={16} />
+                        <span>Production-ready deployment configs</span>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <Check className="text-green-400" size={16} />
+                        <span>Advanced security patterns</span>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <Check className="text-green-400" size={16} />
+                        <span>Priority support & consultation</span>
+                      </div>
+                    </div>
+                    <Button className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
+                      Upgrade Now - $49/month
+                    </Button>
+                  </div>
+                </DialogContent>
+              </Dialog>
+              <p className="text-gray-400 text-sm">
+                Access premium scaffolding templates and advanced features
+              </p>
+            </div>
+          </div>
         </div>
 
         {/* Profile Settings */}
