@@ -9,6 +9,7 @@ import Home from "./pages/Home";
 import Scaffold from "./pages/Scaffold";
 import BestPractices from "./pages/BestPractices";
 import PromptLibrary from "./pages/PromptLibrary";
+import ExportIntegration from "./pages/ExportIntegration";
 import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
 
@@ -26,6 +27,7 @@ const App = () => (
             <Route path="scaffold" element={<Scaffold />} />
             <Route path="best-practices" element={<BestPractices />} />
             <Route path="prompt-library" element={<PromptLibrary />} />
+            <Route path="export-integration" element={<ExportIntegration />} />
             <Route path="settings" element={<Settings />} />
           </Route>
           <Route path="*" element={<NotFound />} />
