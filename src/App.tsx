@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -6,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Layout from "./components/Layout";
 import Home from "./pages/Home";
+import Loading from "./pages/Loading";
 import Scaffold from "./pages/Scaffold";
 import BestPractices from "./pages/BestPractices";
 import PromptLibrary from "./pages/PromptLibrary";
@@ -24,6 +24,7 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route index element={<Home />} />
+            <Route path="loading" element={<Loading />} />
             <Route path="scaffold" element={<Scaffold />} />
             <Route path="best-practices" element={<BestPractices />} />
             <Route path="prompt-library" element={<PromptLibrary />} />
